@@ -3,11 +3,11 @@ Presumably players will want to access help ingame with a command. They might al
 nitty gritty command help through a browser.  I assume it will be possible for both interfaces to pull from the same docss.
 
 # Help Sections
-[ ] ~races~
-[ ] ~birthsigns~
-[ ] skills
-[ ] diseases
-[ ] conditions
-[ ] traits
+  1. [ ] ~races~
+  2. [ ] ~birthsigns~
+  3. [ ] skills
+  4. [ ] diseases
+  5. [ ] conditions
+  6. [ ] traits
 
 # Other Documentation Projects
