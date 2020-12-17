@@ -1,6 +1,6 @@
 # Diseases
 
-## Common Diseases
+# Common Diseases
 Common Diseases are caught most often from traps, poisons,
 or from fighting Diseased animals or people. Common Diseases
 often start out relatively minor, but some progress severely.
@@ -14,7 +14,26 @@ stages. Given the ease of treating Common Diseases, only the
 truly destitute and unfaithful are afflicted with what is seen as
 their just due.
 
-# Diseases
+## Effects of Common Diseases
+All Common Diseases cause the following effects in their victims:
+### Stage One Symptoms
+Diseased (+10)
+
+### Stage Two Symptoms
+Diseased (+0)
+Social Stigma(1)
+
+### Stage Three Symptoms
+Diseased (-10)
+Social Stigma(2)
+
+All Common Diseases can be cured by using any spell level Cure
+Disease spell or potion. Any Common Disease can also be cured
+by sincere repentance and piousness at a shrine to one of the
+Eight and One. Infected animals typically ignore the effects of
+the Common Diseases they carry.
+
+# Common Disease Details
 
 ## Ataxia
 
