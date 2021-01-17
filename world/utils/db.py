@@ -5,8 +5,6 @@ script databases (objdb, roomdb, zonedb, mobdb, etc...)
 import re
 from evennia import GLOBAL_SCRIPTS, logger
 from evennia.utils.dbserialize import deserialize
-from evennia.utils.utils import inherits_from, is_iter, make_iter
-from typeclasses.objs.custom import CUSTOM_OBJS
 
 _RE_COMPARATOR_PATTERN = re.compile(r"(<[>=]?|>=?|!)")
 
@@ -188,22 +186,22 @@ def _search_db(db, vnum=None, return_keys=False, **kwargs):
 
 
 def search_mobdb(vnum=None, db=None, return_keys=False, **kwargs):
-    db = deserialize(GLOBAL_SCRIPTS.mobdb.vnum) if not db else db
+    db = GLOBAL_SCRIPTS.mobdb.vnum if not db else db
     return _search_db(db=db, vnum=vnum, return_keys=return_keys, **kwargs)
 
 
 def search_objdb(vnum=None, db=None, return_keys=False, **kwargs):
-    db = deserialize(GLOBAL_SCRIPTS.objdb.vnum) if not db else db
+    db = GLOBAL_SCRIPTS.objdb.vnum if not db else db
     return _search_db(db=db, vnum=vnum, return_keys=return_keys, **kwargs)
 
 
 def search_zonedb(vnum=None, db=None, return_keys=False, **kwargs):
-    db = deserialize(GLOBAL_SCRIPTS.zonedb.vnum) if not db else db
+    db = GLOBAL_SCRIPTS.zonedb.vnum if not db else db
     return _search_db(db=db, vnum=vnum, return_keys=return_keys, **kwargs)
 
 
 def search_roomdb(vnum=None, db=None, return_keys=False, **kwargs):
-    db = deserialize(GLOBAL_SCRIPTS.roomdb.vnum) if not db else db
+    db = GLOBAL_SCRIPTS.roomdb.vnum if not db else db
     return _search_db(db=db, vnum=vnum, return_keys=return_keys, **kwargs)
 
 

@@ -1,6 +1,9 @@
+from json import JSONEncoder
+import numpy as np
 import random
 import re
 from functools import reduce
+from numpy.lib.arraysetops import isin
 import yaml
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -15,11 +18,23 @@ from evennia.utils.utils import inherits_from, string_partial_matching
 from typeclasses.objs.object import VALID_OBJ_APPLIES
 from typeclasses.objs.custom import CUSTOM_OBJS
 from world.globals import BUILDER_LVL, BOOK_CATEGORIES
-from world.utils.db import search_objdb
+from world.utils.db import search_objdb, search_mobdb
 from world.conditions import DetectHidden, DetectInvis, Hidden, HolyLight, Invisible, Sleeping, get_condition
 
 _CAP_PATTERN = re.compile(r'((?<=[\.\?!\n]\s)(\w+)|(^\w+))')
 _LANG_TAGS = re.compile('\>(.*?)\<', re.I)
+
+
+class DBDumpEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            super().default(obj)
 
 
 class EntityLoader:
@@ -37,6 +52,30 @@ class EntityLoader:
                 type_, vnum = child.split(' ')
                 _children_list.append([type_, vnum])
         self.children = _children_list
+
+        if self.type == 'mob':
+            self.name = search_mobdb(vnum=int(self.vnum))[int(
+                self.vnum)]['sdesc']
+        elif self.type == 'obj':
+            self.name = search_objdb(vnum=int(self.vnum))[int(
+                self.vnum)]['sdesc']
+        else:
+            self.name = "not implemented"
+
+    def children_names(self):
+        names = []
+        n = " (|r{vnum}|n) {name}"
+        for type_, vnum in self.children:
+            vnum = int(vnum)
+            if type_ == 'mob':
+                name = search_mobdb(vnum=vnum)[vnum]['sdesc']
+                names.append(n.format(name, vnum))
+
+            elif type_ == 'obj':
+                name = search_objdb(vnum=vnum)[vnum]['sdesc']
+                names.append(n.format(name=name, vnum=vnum))
+
+        return names
 
     def load(self):
 
@@ -63,6 +102,18 @@ class EntityLoader:
                 obj_bp = obj_bp[int(self.vnum)]
                 obj = create_object(CUSTOM_OBJS[obj_bp['type']],
                                     key=int(self.vnum))
+
+                for ctype, cvnum in self.children:
+                    if ctype != 'obj':
+                        continue
+                    obj_bp = search_objdb(cvnum)
+                    if not obj_bp:
+                        continue
+                    obj_bp = obj_bp[int(cvnum)]
+                    obji = create_object(CUSTOM_OBJS[obj_bp['type']],
+                                         key=int(cvnum))
+                    obji.move_to(obj, quiet=True)
+
                 obj.move_to(self.caller, quiet=True)
 
     def read(caller, yaml_str):
